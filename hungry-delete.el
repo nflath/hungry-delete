@@ -20,9 +20,9 @@
 
 (defvar hungry-delete-mode-map (make-keymap)
   "Keymap for hungry-delete-minor-mode.")
-(define-key hungry-delete-mode-map (kbd "C-d") 'c-hungry-delete-forward)
-(define-key hungry-delete-mode-map (kbd "DEL") 'c-hungry-delete-forward)
-(define-key hungry-delete-mode-map (kbd "<backspace>") 'c-hungry-delete-backwards)
+(define-key hungry-delete-mode-map (kbd "C-d") 'hungry-delete-forward)
+(define-key hungry-delete-mode-map (kbd "DEL") 'hungry-delete-forward)
+(define-key hungry-delete-mode-map (kbd "<backspace>") 'hungry-delete-backwards)
 
 (defmacro hungry-delete-skip-ws-forward (&optional limit)
   "Skip over any whitespace following point.
