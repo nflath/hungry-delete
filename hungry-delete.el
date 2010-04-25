@@ -20,9 +20,8 @@
 
 (defvar hungry-delete-mode-map (make-keymap)
   "Keymap for hungry-delete-minor-mode.")
-(define-key hungry-delete-mode-map (kbd "C-d") 'hungry-delete-forward)
-(define-key hungry-delete-mode-map (kbd "DEL") 'hungry-delete-forward)
-(define-key hungry-delete-mode-map (kbd "<backspace>") 'hungry-delete-backwards)
+(define-key hungry-delete-mode-map [remap delete-char] 'hungry-delete-forward)
+(define-key hungry-delete-mode-map [remap delete-backward-char] 'hungry-delete-backward)
 
 (defmacro hungry-delete-skip-ws-forward (&optional limit)
   "Skip over any whitespace following point.
@@ -67,7 +66,7 @@ continuations."
 (defun hungry-delete-forward ()
   "Delete the following character or all following whitespace up
 to the next non-whitespace character.  See
-\\[c-hungry-delete-backwards]."
+\\[c-hungry-delete-backward]."
   (interactive)
   (let ((here (point)))
     (hungry-delete-skip-ws-forward)
@@ -75,7 +74,7 @@ to the next non-whitespace character.  See
         (delete-region (point) here)
       (delete-char 1))))
 
-(defun hungry-delete-backwards ()
+(defun hungry-delete-backward ()
   "Delete the preceding character or all preceding whitespace
 back to the previous non-whitespace character.  See also
 \\[c-hungry-delete-forward]."
@@ -99,6 +98,16 @@ executed."
   (unless (or (window-minibuffer-p (selected-window))
               (equal (substring (buffer-name) 0 1) " "))
     (hungry-delete-mode t)))
+
+(defadvice delete-char (around hungry-delete activate)
+  (if hungry-delete-mode
+      (hungry-delete-forward)
+    ad-do-it))
+
+(defadvice delete-backward-char (around hungry-delete activate)
+  (if hungry-delete-mode
+      (hungry-delete-backward)
+    ad-do-it))
 
 (easy-mmode-define-global-mode global-hungry-delete-mode hungry-delete-mode turn-on-hungry-delete-mode)
 
