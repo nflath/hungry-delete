@@ -108,7 +108,8 @@ executed."
 (defun turn-on-hungry-delete-mode ()
   "Turns on hungry delete mode if the buffer is appropriate."
   (unless (or (window-minibuffer-p (selected-window))
-              (equal (substring (buffer-name) 0 1) " "))
+              (equal (substring (buffer-name) 0 1) " ")
+              (eq major-mode 'help-mode ))
     (hungry-delete-mode t)))
 
 (easy-mmode-define-global-mode global-hungry-delete-mode hungry-delete-mode turn-on-hungry-delete-mode)
