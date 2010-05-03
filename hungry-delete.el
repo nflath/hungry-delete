@@ -72,7 +72,8 @@ to the next non-whitespace character.  See
     (hungry-delete-skip-ws-forward)
     (if (/= (point) here)
         (delete-region (point) here)
-      (delete-char 1))))
+      (let ((hungry-delete-mode nil))
+        (delete-char 1)))))
 
 (defun hungry-delete-backward ()
   "Delete the preceding character or all preceding whitespace
@@ -83,7 +84,18 @@ back to the previous non-whitespace character.  See also
     (c-skip-ws-backward)
     (if (/= (point) here)
         (delete-region (point) here)
-      (delete-char 1))))
+      (let ((hungry-delete-mode nil))
+        (delete-char -1)))))
+
+(defadvice delete-char (around hungry-delete activate)
+  (if hungry-delete-mode
+      (hungry-delete-forward)
+    ad-do-it))
+
+(defadvice delete-backward-char (around hungry-delete activate)
+  (if hungry-delete-mode
+      (hungry-delete-backward)
+    ad-do-it))
 
 (define-minor-mode hungry-delete-mode
   "Minor mode to enable hungry deletion.  This will delete all
@@ -98,16 +110,6 @@ executed."
   (unless (or (window-minibuffer-p (selected-window))
               (equal (substring (buffer-name) 0 1) " "))
     (hungry-delete-mode t)))
-
-(defadvice delete-char (around hungry-delete activate)
-  (if hungry-delete-mode
-      (hungry-delete-forward)
-    ad-do-it))
-
-(defadvice delete-backward-char (around hungry-delete activate)
-  (if hungry-delete-mode
-      (hungry-delete-backward)
-    ad-do-it))
 
 (easy-mmode-define-global-mode global-hungry-delete-mode hungry-delete-mode turn-on-hungry-delete-mode)
 
