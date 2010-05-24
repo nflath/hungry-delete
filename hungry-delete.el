@@ -81,7 +81,7 @@ back to the previous non-whitespace character.  See also
 \\[c-hungry-delete-forward]."
   (interactive)
   (let ((here (point)))
-    (c-skip-ws-backward)
+    (hungry-delete-skip-ws-backward)
     (if (/= (point) here)
         (delete-region (point) here)
       (let ((hungry-delete-mode nil))
