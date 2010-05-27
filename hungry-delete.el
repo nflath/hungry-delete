@@ -102,7 +102,6 @@ back to the previous non-whitespace character.  See also
 whitespace after or before point when the deletion command is
 executed."
   :init-value nil
-  :global t
   :group 'hungry-delete)
 
 (defun turn-on-hungry-delete-mode ()
