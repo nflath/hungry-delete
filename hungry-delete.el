@@ -8,13 +8,13 @@
 ;; This file contains all the necessary functions and macros, taken from
 ;; cc-mode, to implement hungry deletion without relying on cc-mode.  This
 ;; allows it to be used more easily in all modes, as it is now a minor mode in
-;; it's own right.  global-hungry-delete-mode will turn on hungry-delete-mode in
-;; all buffers.
+;; it's own right.
 ;;
 ;; To use this mode, just put the following in your .emacs file:
 ;;
 ;; (require 'hungry-delete)
-;; (global-hungry-delete-mode)
+;;
+;; and add turn-on-hungry-delete-mode to all relevant hooks.
 ;;
 ;; Code:
 
@@ -111,7 +111,5 @@ executed."
               (equal (substring (buffer-name) 0 1) " ")
               (eq major-mode 'help-mode ))
     (hungry-delete-mode t)))
-
-(easy-mmode-define-global-mode global-hungry-delete-mode hungry-delete-mode turn-on-hungry-delete-mode)
 
 (provide 'hungry-delete)
