@@ -111,4 +111,19 @@ executed."
               (eq major-mode 'help-mode ))
     (hungry-delete-mode t)))
 
+;;Hack around a few issues
+(defadvice expand-abbrev (around stop-hungry activate)
+  (let ((hungry-delete-mode nil))
+    ad-do-it))
+
+(defadvice fill-paragraph (around fix-hungry activate)
+  (let ((hungry-delete-mode nil))
+    ad-do-it))
+
+(defadvice org-self-insert-command (around disable-hungry-delete-in-tables activate)
+  (if (org-table-p)
+      (let ((hungry-delete-mode nil))
+        ad-do-it)
+    ad-do-it))
+
 (provide 'hungry-delete)
