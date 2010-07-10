@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2009 Nathaniel Flath <nflath@gmail.com>
 
-;; Authors: Nathaniel Flath <nflath@gmail.com>
+;; Author: Nathaniel Flath <nflath@gmail.com>
 ;; URL: http://github.com/nflath/hungry-delete
 ;; Version: 1.0
 
@@ -87,6 +87,7 @@ continuations."
                    (eq (char-before) ?\\)))
        (backward-char))))
 
+;;;###autoload
 (defun hungry-delete-forward ()
   "Delete the following character or all following whitespace up
 to the next non-whitespace character.  See
@@ -99,6 +100,7 @@ to the next non-whitespace character.  See
       (let ((hungry-delete-mode nil))
         (delete-char 1)))))
 
+;;;###autoload
 (defun hungry-delete-backward ()
   "Delete the preceding character or all preceding whitespace
 back to the previous non-whitespace character.  See also
@@ -111,6 +113,7 @@ back to the previous non-whitespace character.  See also
       (let ((hungry-delete-mode nil))
         (delete-char -1)))))
 
+;;;###autoload
 (define-minor-mode hungry-delete-mode
   "Minor mode to enable hungry deletion.  This will delete all
 whitespace after or before point when the deletion command is
@@ -118,6 +121,7 @@ executed."
   :init-value nil
   :group 'hungry-delete)
 
+;;;###autoload
 (defun turn-on-hungry-delete-mode ()
   "Turns on hungry delete mode if the buffer is appropriate."
   (unless (or (window-minibuffer-p (selected-window))
