@@ -1,27 +1,51 @@
-;; hungry-delete.el - hungry delete minor mode
-;;
+;;; hungry-delete.el - hungry delete minor mode
+
 ;; Copyright (C) 2009 Nathaniel Flath <nflath@gmail.com>
+
+;; Authors: Nathaniel Flath <nflath@gmail.com>
+;; URL: http://github.com/nflath/hungry-delete
 ;; Version: 1.0
-;;
-;; Commentary:
-;;
+
+;; This file is not part of GNU Emacs.
+
+;;; Commentary:
+
 ;; This file contains all the necessary functions and macros, taken from
 ;; cc-mode, to implement hungry deletion without relying on cc-mode.  This
 ;; allows it to be used more easily in all modes, as it is now a minor mode in
 ;; it's own right.
-;;
+
+;;; Installation
+
 ;; To use this mode, just put the following in your .emacs file:
-;;
 ;; (require 'hungry-delete)
-;;
 ;; and add turn-on-hungry-delete-mode to all relevant hooks.
+
+;;; License:
+
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License
+;; as published by the Free Software Foundation; either version 3
+;; of the License, or (at your option) any later version.
 ;;
-;; Code:
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
+
+;;; Code:
+
 
 (defvar hungry-delete-mode-map (make-keymap)
   "Keymap for hungry-delete-minor-mode.")
 (define-key hungry-delete-mode-map [remap delete-char] 'hungry-delete-forward)
 (define-key hungry-delete-mode-map [remap delete-backward-char] 'hungry-delete-backward)
+(define-key hungry-delete-mode-map [remap backward-delete-char-untabify] 'hungry-delete-backward)
 
 (defmacro hungry-delete-skip-ws-forward (&optional limit)
   "Skip over any whitespace following point.
@@ -87,16 +111,6 @@ back to the previous non-whitespace character.  See also
       (let ((hungry-delete-mode nil))
         (delete-char -1)))))
 
-(defadvice delete-char (around hungry-delete activate)
-  (if hungry-delete-mode
-      (hungry-delete-forward)
-    ad-do-it))
-
-(defadvice delete-backward-char (around hungry-delete activate)
-  (if hungry-delete-mode
-      (hungry-delete-backward)
-    ad-do-it))
-
 (define-minor-mode hungry-delete-mode
   "Minor mode to enable hungry deletion.  This will delete all
 whitespace after or before point when the deletion command is
@@ -111,19 +125,5 @@ executed."
               (eq major-mode 'help-mode ))
     (hungry-delete-mode t)))
 
-;;Hack around a few issues
-(defadvice expand-abbrev (around stop-hungry activate)
-  (let ((hungry-delete-mode nil))
-    ad-do-it))
-
-(defadvice fill-paragraph (around fix-hungry activate)
-  (let ((hungry-delete-mode nil))
-    ad-do-it))
-
-(defadvice org-self-insert-command (around disable-hungry-delete-in-tables activate)
-  (if (org-table-p)
-      (let ((hungry-delete-mode nil))
-        ad-do-it)
-    ad-do-it))
-
 (provide 'hungry-delete)
+;;; hungry-delete.el ends here
