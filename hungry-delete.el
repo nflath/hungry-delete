@@ -1,4 +1,4 @@
-;;; hungry-delete.el - hungry delete minor mode
+;;; hungry-delete.el --- hungry delete minor mode
 
 ;; Copyright (C) 2009 Nathaniel Flath <flat0103@gmail.com>
 
