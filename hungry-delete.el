@@ -10,16 +10,18 @@
 
 ;;; Commentary:
 
-;; This file contains all the necessary functions and macros, taken from
-;; cc-mode, to implement hungry deletion without relying on cc-mode.  This
-;; allows it to be used more easily in all modes, as it is now a minor mode in
-;; it's own right.
+;; cc-mode implements hungry deletion for its programming modes. This
+;; package borrows its implementation in a minor mode, so that hungry
+;; deletion can be used in all modes.
 
 ;;; Installation
 
-;; To use this mode, just put the following in your .emacs file:
+;; To use this mode, put the following in your init.el:
 ;; (require 'hungry-delete)
-;; and add turn-on-hungry-delete-mode to all relevant hooks.
+
+;; You then need to enable hungry-delete-mode, either in
+;; relevant hooks, with turn-on-hungry-delete-mode, or with
+;; global-hungry-delete-mode.
 
 ;;; License:
 
