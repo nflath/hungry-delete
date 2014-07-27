@@ -140,7 +140,7 @@ back to the previous non-whitespace character.  See also
            (delete-char (- n) killflag)
 	   (save-excursion
 	     (insert-char ?\s (- ocol (current-column)) nil))))
-	;; Otherwise, do simple deletion.
+	;; Otherwise, call hungry-delete-backward-iter.
 	(t (hungry-delete-backward-iter))))
 
 ;;;###autoload
