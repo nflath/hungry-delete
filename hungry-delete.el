@@ -87,12 +87,30 @@ continuations."
                    (eq (char-before) ?\\)))
        (backward-char))))
 
+;; delete-forward- and -backward-char are defined in
+;; `simple.el'.
+
+;; If Transient Mark mode is enabled, the mark is active, and N is 1,
+;; delete the text in the region and deactivate the mark instead.
+;; To disable this, set `delete-active-region' to nil.
+
 ;;;###autoload
 (defun hungry-delete-forward ()
   "Delete the following character or all following whitespace up
 to the next non-whitespace character.  See
 \\[c-hungry-delete-backward]."
   (interactive)
+  (cond ((and (use-region-p)
+	      delete-active-region)
+	 ;; If a region is active, kill or delete it.
+	 (if (eq delete-active-region 'kill)
+	     (kill-region (region-beginning) (region-end))
+	   (delete-region (region-beginning) (region-end))))
+	;; Otherwise, call hungry-delete-forward-iter.
+	(t (hungry-delete-forward-iter))))
+
+;;;###autoload
+(defun hungry-delete-forward-iter ()  
   (let ((here (point)))
     (hungry-delete-skip-ws-forward)
     (if (/= (point) here)
@@ -106,6 +124,27 @@ to the next non-whitespace character.  See
 back to the previous non-whitespace character.  See also
 \\[c-hungry-delete-forward]."
   (interactive)
+  (cond ((and (use-region-p)
+	      delete-active-region)
+	 ;; If a region is active, kill or delete it.
+	 (if (eq delete-active-region 'kill)
+	     (kill-region (region-beginning) (region-end))
+	   (delete-region (region-beginning) (region-end))))
+	;; In Overwrite mode, maybe untabify while deleting
+	((null (or (null overwrite-mode)
+		   (<= n 0)
+		   (memq (char-before) '(?\t ?\n))
+		   (eobp)
+		   (eq (char-after) ?\n)))
+	 (let ((ocol (current-column)))
+           (delete-char (- n) killflag)
+	   (save-excursion
+	     (insert-char ?\s (- ocol (current-column)) nil))))
+	;; Otherwise, do simple deletion.
+	(t (hungry-delete-backward-iter))))
+
+;;;###autoload
+(defun hungry-delete-backward-iter ()
   (let ((here (point)))
     (hungry-delete-skip-ws-backward)
     (if (/= (point) here)
