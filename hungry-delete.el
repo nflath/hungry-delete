@@ -129,6 +129,7 @@ executed."
               (eq major-mode 'help-mode ))
     (hungry-delete-mode t)))
 
+;;;###autoload
 (define-globalized-minor-mode global-hungry-delete-mode hungry-delete-mode turn-on-hungry-delete-mode)
 
 (provide 'hungry-delete)
