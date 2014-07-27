@@ -13,5 +13,7 @@ on hungry-delete-mode in all buffers.
 
 To use this mode, just put the following in your .emacs file:
 
+```elisp
 (require 'hungry-delete)
 (global-hungry-delete-mode)
+```
