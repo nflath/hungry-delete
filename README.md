@@ -5,11 +5,11 @@ Version: 1.0
 
 Commentary:
 
-This projects contains all the necessary functions and macros, taken from
-cc-mode, to implement hungry deletion without relying on cc-mode.  This
-allows it to be used more easily in all modes, as it is now a minor mode in
-it's own right.  global-hungry-delete-mode will turn on hungry-delete-mode in
-all buffers.
+This project contains all the necessary functions and macros, taken
+from cc-mode, to implement hungry deletion without relying on
+cc-mode. This allows it to be used more easily in all modes, as it is
+now a minor mode in its own right. global-hungry-delete-mode will turn
+on hungry-delete-mode in all buffers.
 
 To use this mode, just put the following in your .emacs file:
 
