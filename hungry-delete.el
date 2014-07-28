@@ -42,7 +42,6 @@
 
 ;;; Code:
 
-
 (defvar hungry-delete-mode-map (make-keymap)
   "Keymap for hungry-delete-minor-mode.")
 (define-key hungry-delete-mode-map [remap delete-char] 'hungry-delete-forward)
@@ -93,8 +92,22 @@ continuations."
 (defun hungry-delete-forward ()
   "Delete the following character or all following whitespace up
 to the next non-whitespace character.  See
-\\[c-hungry-delete-backward]."
+\\[c-hungry-delete-backward].
+
+Like delete-forward-char, hungry-delete-forward obeys Transient
+Mark Mode: if the region is activate, it deletes the text in the
+region."
   (interactive)
+  (cond ((and (use-region-p)
+	      delete-active-region)
+	 ;; If a region is active, kill or delete it.
+	 (if (eq delete-active-region 'kill)
+	     (kill-region (region-beginning) (region-end))
+	   (delete-region (region-beginning) (region-end))))
+	;; Otherwise, call hungry-delete-forward-iter.
+	(t (hungry-delete-forward-iter))))
+
+(defun hungry-delete-forward-iter ()  
   (let ((here (point)))
     (hungry-delete-skip-ws-forward)
     (if (/= (point) here)
@@ -106,8 +119,22 @@ to the next non-whitespace character.  See
 (defun hungry-delete-backward ()
   "Delete the preceding character or all preceding whitespace
 back to the previous non-whitespace character.  See also
-\\[c-hungry-delete-forward]."
+\\[c-hungry-delete-forward].
+
+Like delete-backward-char, hungry-delete-backward obeys Transient
+Mark Mode: if the region is activate, it deletes the text in the
+region."
   (interactive)
+  (cond ((and (use-region-p)
+	      delete-active-region)
+	 ;; If a region is active, kill or delete it.
+	 (if (eq delete-active-region 'kill)
+	     (kill-region (region-beginning) (region-end))
+	   (delete-region (region-beginning) (region-end))))
+	;; Otherwise, call hungry-delete-backward-iter.
+	(t (hungry-delete-backward-iter))))
+
+(defun hungry-delete-backward-iter ()
   (let ((here (point)))
     (hungry-delete-skip-ws-backward)
     (if (/= (point) here)
