@@ -130,16 +130,6 @@ back to the previous non-whitespace character.  See also
 	 (if (eq delete-active-region 'kill)
 	     (kill-region (region-beginning) (region-end))
 	   (delete-region (region-beginning) (region-end))))
-	;; In Overwrite mode, maybe untabify while deleting
-	((null (or (null overwrite-mode)
-		   (<= n 0)
-		   (memq (char-before) '(?\t ?\n))
-		   (eobp)
-		   (eq (char-after) ?\n)))
-	 (let ((ocol (current-column)))
-           (delete-char (- n) killflag)
-	   (save-excursion
-	     (insert-char ?\s (- ocol (current-column)) nil))))
 	;; Otherwise, call hungry-delete-backward-iter.
 	(t (hungry-delete-backward-iter))))
 
