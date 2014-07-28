@@ -40,7 +40,6 @@
 
 ;;; Code:
 
-
 (defvar hungry-delete-mode-map (make-keymap)
   "Keymap for hungry-delete-minor-mode.")
 (define-key hungry-delete-mode-map [remap delete-char] 'hungry-delete-forward)
@@ -87,18 +86,15 @@ continuations."
                    (eq (char-before) ?\\)))
        (backward-char))))
 
-;; delete-forward- and -backward-char are defined in
-;; `simple.el'.
-
-;; If Transient Mark mode is enabled, the mark is active, and N is 1,
-;; delete the text in the region and deactivate the mark instead.
-;; To disable this, set `delete-active-region' to nil.
-
 ;;;###autoload
 (defun hungry-delete-forward ()
   "Delete the following character or all following whitespace up
 to the next non-whitespace character.  See
-\\[c-hungry-delete-backward]."
+\\[c-hungry-delete-backward].
+
+Like delete-forward-char, hungry-delete-forward obeys Transient
+Mark Mode: if the region is activate, it deletes the text in the
+region."
   (interactive)
   (cond ((and (use-region-p)
 	      delete-active-region)
@@ -122,7 +118,11 @@ to the next non-whitespace character.  See
 (defun hungry-delete-backward ()
   "Delete the preceding character or all preceding whitespace
 back to the previous non-whitespace character.  See also
-\\[c-hungry-delete-forward]."
+\\[c-hungry-delete-forward].
+
+Like delete-backward-char, hungry-delete-backward obeys Transient
+Mark Mode: if the region is activate, it deletes the text in the
+region."
   (interactive)
   (cond ((and (use-region-p)
 	      delete-active-region)
