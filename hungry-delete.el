@@ -1,6 +1,6 @@
 ;;; hungry-delete.el --- hungry delete minor mode
 
-;; Copyright (C) 2009 Nathaniel Flath <flat0103@gmail.com>
+;; Copyright (C) 2009 - 2014 Nathaniel Flath <flat0103@gmail.com>
 
 ;; Author: Nathaniel Flath <flat0103@gmail.com>
 ;; URL: http://github.com/nflath/hungry-delete
