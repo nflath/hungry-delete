@@ -105,7 +105,6 @@ region."
 	;; Otherwise, call hungry-delete-forward-iter.
 	(t (hungry-delete-forward-iter))))
 
-;;;###autoload
 (defun hungry-delete-forward-iter ()  
   (let ((here (point)))
     (hungry-delete-skip-ws-forward)
@@ -133,7 +132,6 @@ region."
 	;; Otherwise, call hungry-delete-backward-iter.
 	(t (hungry-delete-backward-iter))))
 
-;;;###autoload
 (defun hungry-delete-backward-iter ()
   (let ((here (point)))
     (hungry-delete-skip-ws-backward)
