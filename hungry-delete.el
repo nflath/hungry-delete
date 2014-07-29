@@ -116,14 +116,14 @@ KILLFLAG is set if N was explicitly specified."
           (use-region-p)
 	      delete-active-region
 	      (= n 1))
-         ;; If a region is active, kill or delete it.
-         (if (eq delete-active-region 'kill)
-             (kill-region (region-beginning) (region-end))
-           (delete-region (region-beginning) (region-end))))
-        ;; If a prefix argument is not given, call hungry-delete-forward-iter.
-        ((not current-prefix-arg) (hungry-delete-forward-impl))
-        ;; Otherwise, a prefix has been given, so delete n characters.
-        (t (delete-char n killflag))))
+	 ;; If a region is active, kill or delete it.
+	 (if (eq delete-active-region 'kill)
+	     (kill-region (region-beginning) (region-end))
+	   (delete-region (region-beginning) (region-end))))
+	;; If a prefix argument has been given, delete n characters.
+	(current-prefix-arg (delete-char n killflag))
+	;; Otherwise, call hungry-delete-forward-impl.
+	(t (hungry-delete-forward-impl))))
 
 ;;;###autoload
 (defun hungry-delete-backward (n &optional killflag)
@@ -164,10 +164,10 @@ arg, and KILLFLAG is set if N is explicitly specified."
            (delete-char (- n) killflag)
            (save-excursion
              (insert-char ?\s (- ocol (current-column)) nil))))
-        ;; If a prefix argument is not given, call hungry-delete-backward-iter.
-        ((not current-prefix-arg) (hungry-delete-backward-impl))
-        ;; Otherwise, a prefix has been given, so delete n characters backwards.
-        (t (delete-char (- n) killflag))))
+        ;; If a prefix has been given, delete n characters backwards.
+        (current-prefix-arg (delete-char (- n) killflag))
+        ;; Otherwise, call hungry-delete-backward-impl.
+        (t (hungry-delete-backward-impl))))
 
 (defun hungry-delete-impl (fn n)
   "Implementation of hungry-delete functionality.
