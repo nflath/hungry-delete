@@ -10,7 +10,7 @@
 
 ;;; Commentary:
 
-;; cc-mode implements hungry deletion for its programming modes. This
+;; cc-mode implements hungry deletion for its programming modes.  This
 ;; package borrows its implementation in a minor mode, so that hungry
 ;; deletion can be used in all modes.
 
@@ -103,7 +103,7 @@ whitespace, up to the next non-whitespace character.  See
 
 hungry-delete-backward tries to mimic delete-backward-char's
 behavior in several ways: if the region is activate, it deletes
-the text in the region. If a prefix argument is given, delete the
+the text in the region.  If a prefix argument is given, delete the
 following N characters (previous if N is negative).
 
 Optional second arg KILLFLAG non-nil means to kill (save in kill
@@ -133,7 +133,7 @@ back to the previous non-whitespace character.  See also
 
 hungry-delete-backward tries to mimic delete-backward-char's
 behavior in several ways: if the region is activate, it deletes
-the text in the region. If a prefix argument is given, delete the
+the text in the region.  If a prefix argument is given, delete the
 previous N characters (following if N is negative).
 
 In Overwrite mode, single character backward deletion may replace
