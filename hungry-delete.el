@@ -56,8 +56,8 @@
 
 (defun hungry-delete-skip-ws-forward (&optional limit)
   "Skip over any whitespace following point.
-This function skips over horizontal and vertical whitespace and line
-continuations."
+This function skips over horizontal and vertical whitespace and
+line continuations."
   (if limit
       (let ((limit (or limit (point-max))))
         (while (progn
@@ -77,8 +77,8 @@ continuations."
 
 (defun hungry-delete-skip-ws-backward (&optional limit)
   "Skip over any whitespace preceding point.
-This function skips over horizontal and vertical whitespace and line
-continuations."
+This function skips over horizontal and vertical whitespace and
+line continuations."
   (if limit
       (let ((limit (or limit (point-min))))
         (while (progn
@@ -94,7 +94,6 @@ continuations."
                   (eq (char-before) ?\\)))
       (backward-char))))
 
-
 ;;;###autoload
 (defun hungry-delete-forward (n &optional killflag)
   "Delete the following character, or all of the following
@@ -103,8 +102,8 @@ whitespace, up to the next non-whitespace character.  See
 
 hungry-delete-backward tries to mimic delete-backward-char's
 behavior in several ways: if the region is activate, it deletes
-the text in the region.  If a prefix argument is given, delete the
-following N characters (previous if N is negative).
+the text in the region.  If a prefix argument is given, delete
+the following N characters (previous if N is negative).
 
 Optional second arg KILLFLAG non-nil means to kill (save in kill
 ring) instead of delete.  Interactively, N is the prefix arg, and
@@ -133,8 +132,8 @@ back to the previous non-whitespace character.  See also
 
 hungry-delete-backward tries to mimic delete-backward-char's
 behavior in several ways: if the region is activate, it deletes
-the text in the region.  If a prefix argument is given, delete the
-previous N characters (following if N is negative).
+the text in the region.  If a prefix argument is given, delete
+the previous N characters (following if N is negative).
 
 In Overwrite mode, single character backward deletion may replace
 tabs with spaces so as to back over columns, unless point is at
