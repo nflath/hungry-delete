@@ -171,10 +171,10 @@ arg, and KILLFLAG is set if N is explicitly specified."
 
 (defun hungry-delete-impl (fn n)
   "Implementation of hungry-delete functionality.
-fn is the function to call to go to the end of whitespace (will
+FN is the function to call to go to the end of whitespace (will
 be either hungry-delete-skip-ws-forward or
-hungry-delete-skip-ws-backwards by default).
-n is the number of characters to delete if there is no whitespace (will be either 1
+hungry-delete-skip-ws-backwards by default).  N is the number of
+characters to delete if there is no whitespace (will be either 1
 or -1 by default)."
   (let ((here (point)))
     (funcall fn)
