@@ -96,21 +96,31 @@ continuations."
        (backward-char))))
 
 ;;;###autoload
-(defun hungry-delete-forward ()
+(defun hungry-delete-forward (n &optional killflag)
   "Delete the following character or all following whitespace up
 to the next non-whitespace character.  See
 \\[c-hungry-delete-backward].
 
-Like delete-forward-char, hungry-delete-forward obeys Transient
-Mark Mode: if the region is activate, it deletes the text in the
-region."
-  (interactive)
+hungry-delete-backward tries to mimic delete-backward-char's
+behavior in several ways: if the region is activate, it deletes
+the text in the region. If a prefix argument is given, delete the
+following N characters (previous if N is negative).
+
+Optional second arg KILLFLAG non-nil means to kill (save in kill
+ring) instead of delete.  Interactively, N is the prefix arg, and
+KILLFLAG is set if N was explicitly specified."
+  (interactive "p\nP")
+  (unless (integerp n)
+    (signal 'wrong-type-argument (list 'integerp n)))
   (cond ((and (use-region-p)
-	      delete-active-region)
+	      delete-active-region
+	      (= n 1))
 	 ;; If a region is active, kill or delete it.
 	 (if (eq delete-active-region 'kill)
 	     (kill-region (region-beginning) (region-end))
 	   (delete-region (region-beginning) (region-end))))
+	;; If a prefix argument is given, delete n characters.
+	((/= n 1) (delete-char n killflag))
 	;; Otherwise, call hungry-delete-forward-iter.
 	(t (hungry-delete-forward-iter))))
 
@@ -123,21 +133,45 @@ region."
         (delete-char 1)))))
 
 ;;;###autoload
-(defun hungry-delete-backward ()
+(defun hungry-delete-backward (n &optional killflag)
   "Delete the preceding character or all preceding whitespace
 back to the previous non-whitespace character.  See also
 \\[c-hungry-delete-forward].
 
-Like delete-backward-char, hungry-delete-backward obeys Transient
-Mark Mode: if the region is activate, it deletes the text in the
-region."
-  (interactive)
+hungry-delete-backward tries to mimic delete-backward-char's
+behavior in several ways: if the region is activate, it deletes
+the text in the region. If a prefix argument is given, delete the
+previous N characters (following if N is negative).
+
+In Overwrite mode, single character backward deletion may replace
+tabs with spaces so as to back over columns, unless point is at
+the end of the line.
+
+Optional second arg KILLFLAG, if non-nil, means to kill (save in
+kill ring) instead of delete.  Interactively, N is the prefix
+arg, and KILLFLAG is set if N is explicitly specified."
+  (interactive "p\nP")
+  (unless (integerp n)
+    (signal 'wrong-type-argument (list 'integerp n)))
   (cond ((and (use-region-p)
-	      delete-active-region)
+	      delete-active-region
+	      (= n 1))
 	 ;; If a region is active, kill or delete it.
 	 (if (eq delete-active-region 'kill)
 	     (kill-region (region-beginning) (region-end))
 	   (delete-region (region-beginning) (region-end))))
+	;; In Overwrite mode, maybe untabify while deleting
+	((null (or (null overwrite-mode)
+		   (<= n 0)
+		   (memq (char-before) '(?\t ?\n))
+		   (eobp)
+		   (eq (char-after) ?\n)))
+	 (let ((ocol (current-column)))
+           (delete-char (- n) killflag)
+	   (save-excursion
+	     (insert-char ?\s (- ocol (current-column)) nil))))
+	;; If a prefix argument is given, delete n characters.
+	((/= n 1) (delete-char (- n) killflag))
 	;; Otherwise, call hungry-delete-backward-iter.
 	(t (hungry-delete-backward-iter))))
 
