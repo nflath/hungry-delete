@@ -119,10 +119,11 @@ KILLFLAG is set if N was explicitly specified."
 	 (if (eq delete-active-region 'kill)
 	     (kill-region (region-beginning) (region-end))
 	   (delete-region (region-beginning) (region-end))))
-	;; If a prefix argument is given, delete n characters.
-	((/= n 1) (delete-char n killflag))
-	;; Otherwise, call hungry-delete-forward-iter.
-	(t (hungry-delete-forward-iter))))
+	;; If a prefix argument is not given, call hungry-delete-forward-iter.
+	((eq current-prefix-arg ())
+	 (hungry-delete-forward-iter))
+	;; Otherwise, a prefix has been given, so delete n characters.
+	(t (delete-char n killflag))))
 
 (defun hungry-delete-forward-iter ()
   (let ((here (point)))
@@ -170,10 +171,11 @@ arg, and KILLFLAG is set if N is explicitly specified."
            (delete-char (- n) killflag)
 	   (save-excursion
 	     (insert-char ?\s (- ocol (current-column)) nil))))
-	;; If a prefix argument is given, delete n characters.
-	((/= n 1) (delete-char (- n) killflag))
-	;; Otherwise, call hungry-delete-backward-iter.
-	(t (hungry-delete-backward-iter))))
+	;; If a prefix argument is not given, call hungry-delete-backward-iter.
+	((eq current-prefix-arg ())
+	 (hungry-delete-backward-iter))
+	;; Otherwise, a prefix has been given, so delete n characters backwards.
+	(t (delete-char (- n) killflag))))
 
 (defun hungry-delete-backward-iter ()
   (let ((here (point)))
