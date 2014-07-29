@@ -97,9 +97,9 @@ continuations."
 
 ;;;###autoload
 (defun hungry-delete-forward (n &optional killflag)
-  "Delete the following character or all following whitespace up
-to the next non-whitespace character.  See
-\\[c-hungry-delete-backward].
+  "Delete the following character, or all of the following
+whitespace, up to the next non-whitespace character.  See
+\\[c-hungry-delete-forward].
 
 hungry-delete-backward tries to mimic delete-backward-char's
 behavior in several ways: if the region is activate, it deletes
@@ -129,7 +129,7 @@ KILLFLAG is set if N was explicitly specified."
 (defun hungry-delete-backward (n &optional killflag)
   "Delete the preceding character or all preceding whitespace
 back to the previous non-whitespace character.  See also
-\\[c-hungry-delete-forward].
+\\[c-hungry-delete-backward].
 
 hungry-delete-backward tries to mimic delete-backward-char's
 behavior in several ways: if the region is activate, it deletes
