@@ -199,7 +199,7 @@ executed."
 
 ;;;###autoload
 (defun turn-on-hungry-delete-mode ()
-  "Turns on hungry delete mode if the buffer is appropriate."
+  "Turn on hungry delete mode if the buffer is appropriate."
   (unless (or (window-minibuffer-p (selected-window))
               (equal (substring (buffer-name) 0 1) " ")
               (eq major-mode 'help-mode ))
