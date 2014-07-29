@@ -184,9 +184,11 @@ or -1 by default)."
         (delete-char n)))))
 
 (defun hungry-delete-forward-impl ()
+  "Do the dirty work of calling hungry-delete-forward."
   (hungry-delete-impl 'hungry-delete-skip-ws-forward 1))
 
 (defun hungry-delete-backward-impl ()
+  "Do the dirty work of calling hungry-delete-backward."
   (hungry-delete-impl 'hungry-delete-skip-ws-backward -1))
 
 ;;;###autoload
