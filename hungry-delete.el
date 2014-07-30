@@ -10,7 +10,7 @@
 
 ;;; Commentary:
 
-;; cc-mode implements hungry deletion for its programming modes. This
+;; cc-mode implements hungry deletion for its programming modes.  This
 ;; package borrows its implementation in a minor mode, so that hungry
 ;; deletion can be used in all modes.
 
@@ -56,8 +56,8 @@
 
 (defun hungry-delete-skip-ws-forward (&optional limit)
   "Skip over any whitespace following point.
-This function skips over horizontal and vertical whitespace and line
-continuations."
+This function skips over horizontal and vertical whitespace and
+line continuations."
   (if limit
       (let ((limit (or limit (point-max))))
         (while (progn
@@ -77,8 +77,8 @@ continuations."
 
 (defun hungry-delete-skip-ws-backward (&optional limit)
   "Skip over any whitespace preceding point.
-This function skips over horizontal and vertical whitespace and line
-continuations."
+This function skips over horizontal and vertical whitespace and
+line continuations."
   (if limit
       (let ((limit (or limit (point-min))))
         (while (progn
@@ -94,17 +94,16 @@ continuations."
                   (eq (char-before) ?\\)))
       (backward-char))))
 
-
 ;;;###autoload
 (defun hungry-delete-forward (n &optional killflag)
-  "Delete the following character or all following whitespace up
-to the next non-whitespace character.  See
-\\[c-hungry-delete-backward].
+  "Delete the following character, or all of the following
+whitespace, up to the next non-whitespace character.  See
+\\[c-hungry-delete-forward].
 
 hungry-delete-backward tries to mimic delete-backward-char's
 behavior in several ways: if the region is activate, it deletes
-the text in the region. If a prefix argument is given, delete the
-following N characters (previous if N is negative).
+the text in the region.  If a prefix argument is given, delete
+the following N characters (previous if N is negative).
 
 Optional second arg KILLFLAG non-nil means to kill (save in kill
 ring) instead of delete.  Interactively, N is the prefix arg, and
@@ -129,12 +128,12 @@ KILLFLAG is set if N was explicitly specified."
 (defun hungry-delete-backward (n &optional killflag)
   "Delete the preceding character or all preceding whitespace
 back to the previous non-whitespace character.  See also
-\\[c-hungry-delete-forward].
+\\[c-hungry-delete-backward].
 
 hungry-delete-backward tries to mimic delete-backward-char's
 behavior in several ways: if the region is activate, it deletes
-the text in the region. If a prefix argument is given, delete the
-previous N characters (following if N is negative).
+the text in the region.  If a prefix argument is given, delete
+the previous N characters (following if N is negative).
 
 In Overwrite mode, single character backward deletion may replace
 tabs with spaces so as to back over columns, unless point is at
@@ -171,10 +170,10 @@ arg, and KILLFLAG is set if N is explicitly specified."
 
 (defun hungry-delete-impl (fn n)
   "Implementation of hungry-delete functionality.
-fn is the function to call to go to the end of whitespace (will
+FN is the function to call to go to the end of whitespace (will
 be either hungry-delete-skip-ws-forward or
-hungry-delete-skip-ws-backwards by default).
-n is the number of characters to delete if there is no whitespace (will be either 1
+hungry-delete-skip-ws-backwards by default).  N is the number of
+characters to delete if there is no whitespace (will be either 1
 or -1 by default)."
   (let ((here (point)))
     (funcall fn)
@@ -184,9 +183,11 @@ or -1 by default)."
         (delete-char n)))))
 
 (defun hungry-delete-forward-impl ()
+  "Do the dirty work of calling hungry-delete-forward."
   (hungry-delete-impl 'hungry-delete-skip-ws-forward 1))
 
 (defun hungry-delete-backward-impl ()
+  "Do the dirty work of calling hungry-delete-backward."
   (hungry-delete-impl 'hungry-delete-skip-ws-backward -1))
 
 ;;;###autoload
@@ -199,7 +200,7 @@ executed."
 
 ;;;###autoload
 (defun turn-on-hungry-delete-mode ()
-  "Turns on hungry delete mode if the buffer is appropriate."
+  "Turn on hungry delete mode if the buffer is appropriate."
   (unless (or (window-minibuffer-p (selected-window))
               (equal (substring (buffer-name) 0 1) " ")
               (eq major-mode 'help-mode ))
