@@ -54,6 +54,9 @@
 (define-key hungry-delete-mode-map [remap delete-backward-char] 'hungry-delete-backward)
 (define-key hungry-delete-mode-map [remap backward-delete-char-untabify] 'hungry-delete-backward)
 
+(defvar hungry-delete-chars-to-skip " \t\n\r\f\v"
+  "String of characters to skip.")
+
 (defun hungry-delete-skip-ws-forward (&optional limit)
   "Skip over any whitespace following point.
 This function skips over horizontal and vertical whitespace and
@@ -62,14 +65,14 @@ line continuations."
       (let ((limit (or limit (point-max))))
         (while (progn
                  ;; skip-syntax-* doesn't count \n as whitespace..
-                 (skip-chars-forward " \t\n\r\f\v" limit)
+                 (skip-chars-forward hungry-delete-chars-to-skip limit)
                  (when (and (eq (char-after) ?\\)
                             (< (point) limit))
                    (forward-char)
                    (or (eolp)
                        (progn (backward-char) nil))))))
     (while (progn
-             (skip-chars-forward " \t\n\r\f\v")
+             (skip-chars-forward hungry-delete-chars-to-skip)
              (when (eq (char-after) ?\\)
                (forward-char)
                (or (eolp)
@@ -83,13 +86,13 @@ line continuations."
       (let ((limit (or limit (point-min))))
         (while (progn
                  ;; skip-syntax-* doesn't count \n as whitespace..
-                 (skip-chars-backward " \t\n\r\f\v" limit)
+                 (skip-chars-backward hungry-delete-chars-to-skip limit)
                  (and (eolp)
                       (eq (char-before) ?\\)
                       (> (point) limit)))
           (backward-char)))
     (while (progn
-             (skip-chars-backward " \t\n\r\f\v")
+             (skip-chars-backward hungry-delete-chars-to-skip)
              (and (eolp)
                   (eq (char-before) ?\\)))
       (backward-char))))
