@@ -4,7 +4,7 @@
 
 ;; Author: Nathaniel Flath <flat0103@gmail.com>
 ;; URL: http://github.com/nflath/hungry-delete
-;; Version: 1.1
+;; Version: 1.1.2
 
 ;; This file is not part of GNU Emacs.
 
@@ -76,7 +76,9 @@ line continuations."
              (when (eq (char-after) ?\\)
                (forward-char)
                (or (eolp)
-                   (progn (backward-char) nil)))))))
+                   (progn (backward-char) nil))))))
+  (while (get-text-property (point) 'read-only)
+    (backward-char)))
 
 (defun hungry-delete-skip-ws-backward (&optional limit)
   "Skip over any whitespace preceding point.
@@ -95,7 +97,9 @@ line continuations."
              (skip-chars-backward hungry-delete-chars-to-skip)
              (and (eolp)
                   (eq (char-before) ?\\)))
-      (backward-char))))
+      (backward-char)))
+  (while (get-text-property (point) 'read-only)
+    (forward-char)))
 
 ;;;###autoload
 (defun hungry-delete-forward (n &optional killflag)
@@ -126,6 +130,9 @@ KILLFLAG is set if N was explicitly specified."
 	(current-prefix-arg (delete-char n killflag))
 	;; Otherwise, call hungry-delete-forward-impl.
 	(t (hungry-delete-forward-impl))))
+
+
+
 
 ;;;###autoload
 (defun hungry-delete-backward (n &optional killflag)
