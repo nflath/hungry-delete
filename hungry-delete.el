@@ -206,7 +206,8 @@ or -1 by default)."
 whitespace after or before point when the deletion command is
 executed."
   :init-value nil
-  :group 'hungry-delete)
+  :group 'hungry-delete
+  :lighter " h")
 
 ;;;###autoload
 (defun turn-on-hungry-delete-mode ()
