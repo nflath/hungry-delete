@@ -53,6 +53,8 @@
 
 (define-key hungry-delete-mode-map [remap delete-backward-char] 'hungry-delete-backward)
 (define-key hungry-delete-mode-map [remap backward-delete-char-untabify] 'hungry-delete-backward)
+(define-key hungry-delete-mode-map [remap c-electric-backspace] 'hungry-delete-backward)
+(define-key hungry-delete-mode-map [remap c-electric-delete-forward] 'hungry-delete-forward)
 
 (defvar hungry-delete-chars-to-skip " \t\n\r\f\v"
   "String of characters to skip.")
