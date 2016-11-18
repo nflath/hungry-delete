@@ -4,7 +4,7 @@
 
 ;; Author: Nathaniel Flath <flat0103@gmail.com>
 ;; URL: http://github.com/nflath/hungry-delete
-;; Version: 1.1.2
+;; Version: 1.1.3
 
 ;; This file is not part of GNU Emacs.
 
@@ -59,6 +59,9 @@
 (defvar hungry-delete-chars-to-skip " \t\n\r\f\v"
   "String of characters to skip.")
 
+(defvar hyngry-delete-delete-backslash-eol t
+  "Whether a backslash at the end of a line will be deleted.")
+
 (defun hungry-delete-skip-ws-forward (&optional limit)
   "Skip over any whitespace following point.
 This function skips over horizontal and vertical whitespace and
@@ -68,17 +71,19 @@ line continuations."
         (while (progn
                  ;; skip-syntax-* doesn't count \n as whitespace..
                  (skip-chars-forward hungry-delete-chars-to-skip limit)
-                 (when (and (eq (char-after) ?\\)
-                            (< (point) limit))
-                   (forward-char)
-                   (or (eolp)
-                       (progn (backward-char) nil))))))
+                 (when hungry-delete-delete-backslash-eol
+                   (when (and (eq (char-after) ?\\)
+                              (< (point) limit))
+                     (forward-char)
+                     (or (eolp)
+                         (progn (backward-char) nil)))))))
     (while (progn
              (skip-chars-forward hungry-delete-chars-to-skip)
-             (when (eq (char-after) ?\\)
-               (forward-char)
-               (or (eolp)
-                   (progn (backward-char) nil))))))
+             (when hungry-delete-delete-backslash-eol
+               (when (eq (char-after) ?\\)
+                 (forward-char)
+                 (or (eolp)
+                     (progn (backward-char) nil)))))))
   (while (get-text-property (point) 'read-only)
     (backward-char)))
 
@@ -91,14 +96,16 @@ line continuations."
         (while (progn
                  ;; skip-syntax-* doesn't count \n as whitespace..
                  (skip-chars-backward hungry-delete-chars-to-skip limit)
-                 (and (eolp)
-                      (eq (char-before) ?\\)
-                      (> (point) limit)))
+                 (when hungry-delete-delete-backslash-eol
+                   (and (eolp)
+                        (eq (char-before) ?\\)
+                        (> (point) limit))))
           (backward-char)))
     (while (progn
              (skip-chars-backward hungry-delete-chars-to-skip)
-             (and (eolp)
-                  (eq (char-before) ?\\)))
+             (when hungry-delete-delete-backslash-eol
+               (and (eolp)
+                    (eq (char-before) ?\\))))
       (backward-char)))
   (while (get-text-property (point) 'read-only)
     (forward-char)))
