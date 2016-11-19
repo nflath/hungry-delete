@@ -59,7 +59,7 @@
 (defvar hungry-delete-chars-to-skip " \t\n\r\f\v"
   "String of characters to skip.")
 
-(defvar hyngry-delete-delete-backslash-eol t
+(defvar hungry-delete-delete-backslash-eol t
   "Whether a backslash at the end of a line will be deleted.")
 
 (defun hungry-delete-skip-ws-forward (&optional limit)
