@@ -59,7 +59,7 @@
 (defvar hungry-delete-chars-to-skip " \t\n\r\f\v"
   "String of characters to skip.")
 
-(defvar hungry-delete-except-modes '(help-mode)
+(defvar hungry-delete-except-modes '(help-mode minibuffer-inactive-mode)
   "List of modes hungry-delete will not be turned on in.")
 
 (defun hungry-delete-skip-ws-forward ()
@@ -204,9 +204,7 @@ executed."
 (defun turn-on-hungry-delete-mode ()
   "Turn on hungry delete mode if the buffer is appropriate."
   (interactive)
-  (unless (or (member major-mode hungry-delete-except-modes)
-              (window-minibuffer-p))
-
+  (unless (member major-mode hungry-delete-except-modes)
     (hungry-delete-mode t)))
 
 ;;;###autoload
