@@ -62,7 +62,6 @@
 (defvar hungry-delete-except-modes '(help-mode)
   "List of modes hungry-delete will not be turned on in.")
 
-
 (defun hungry-delete-skip-ws-forward ()
   "Skip over any whitespace following point.
 This function skips over horizontal and vertical whitespace and
@@ -204,7 +203,10 @@ executed."
 ;;;###autoload
 (defun turn-on-hungry-delete-mode ()
   "Turn on hungry delete mode if the buffer is appropriate."
-  (unless (member major-mode hungry-delete-except-modes)
+  (interactive)
+  (unless (or (member major-mode hungry-delete-except-modes)
+              (window-minibuffer-p))
+
     (hungry-delete-mode t)))
 
 ;;;###autoload
