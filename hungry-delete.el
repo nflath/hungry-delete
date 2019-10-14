@@ -89,7 +89,7 @@ line continuations."
              (= (point) (point-min))
              (< (skip-chars-backward hungry-delete-chars-to-skip) 0)
              (forward-char)))))
-  (while (get-text-property (point) 'read-only)
+  (while (and (get-text-property (point) 'read-only) (not (eolp)))
     (forward-char)))
 
 ;;;###autoload
