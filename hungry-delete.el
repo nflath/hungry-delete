@@ -59,7 +59,7 @@
 (defvar hungry-delete-chars-to-skip " \t\n\r\f\v"
   "String of characters to skip.")
 
-(defvar hungry-delete-except-modes '(help-mode minibuffer-inactive-mode)
+(defvar hungry-delete-except-modes '(help-mode minibuffer-inactive-mode calc-mode)
   "List of modes hungry-delete will not be turned on in.")
 
 (defun hungry-delete-skip-ws-forward ()
