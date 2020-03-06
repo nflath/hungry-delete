@@ -4,7 +4,7 @@
 
 ;; Author: Nathaniel Flath <flat0103@gmail.com>
 ;; URL: http://github.com/nflath/hungry-delete
-;; Version: 1.1.5
+;; Version: 1.1.6
 
 ;; This file is not part of GNU Emacs.
 
@@ -109,6 +109,7 @@ KILLFLAG is set if N was explicitly specified."
   (interactive "p\nP")
   (unless (integerp n)
     (signal 'wrong-type-argument (list 'integerp n)))
+  (if cua--rectangle (delete-forward-char n killflag)
   (cond ((and
           (use-region-p)
 	      delete-active-region
@@ -146,28 +147,29 @@ arg, and KILLFLAG is set if N is explicitly specified."
   (interactive "p\nP")
   (unless (integerp n)
     (signal 'wrong-type-argument (list 'integerp n)))
-  (cond ((and
-          (use-region-p)
-          delete-active-region
-          (= n 1))
-         ;; If a region is active, kill or delete it.
-         (if (eq delete-active-region 'kill)
-             (kill-region (region-beginning) (region-end))
-           (delete-region (region-beginning) (region-end))))
-        ;; In Overwrite mode, maybe untabify while deleting
-        ((null (or (null overwrite-mode)
-                   (<= n 0)
-                   (memq (char-before) '(?\t ?\n))
-                   (eobp)
-                   (eq (char-after) ?\n)))
-         (let ((ocol (current-column)))
-           (delete-char (- n) killflag)
-           (save-excursion
-             (insert-char ?\s (- ocol (current-column)) nil))))
-        ;; If a prefix has been given, delete n characters backwards.
-        (current-prefix-arg (delete-char (- n) killflag))
-        ;; Otherwise, call hungry-delete-backward-impl.
-        (t (hungry-delete-backward-impl))))
+  (if cua--rectangle (delete-backward-char n killflag)
+    (cond ((and
+            (use-region-p)
+            delete-active-region
+            (= n 1))
+           ;; If a region is active, kill or delete it.
+           (if (eq delete-active-region 'kill)
+               (kill-region (region-beginning) (region-end))
+             (delete-region (region-beginning) (region-end))))
+          ;; In Overwrite mode, maybe untabify while deleting
+          ((null (or (null overwrite-mode)
+                     (<= n 0)
+                     (memq (char-before) '(?\t ?\n))
+                     (eobp)
+                     (eq (char-after) ?\n)))
+           (let ((ocol (current-column)))
+             (delete-char (- n) killflag)
+             (save-excursion
+               (insert-char ?\s (- ocol (current-column)) nil))))
+          ;; If a prefix has been given, delete n characters backwards.
+          (current-prefix-arg (delete-char (- n) killflag))
+          ;; Otherwise, call hungry-delete-backward-impl.
+          (t (hungry-delete-backward-impl)))))
 
 (defun hungry-delete-impl (fn n)
   "Implementation of hungry-delete functionality.
