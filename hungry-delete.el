@@ -121,7 +121,7 @@ KILLFLAG is set if N was explicitly specified."
 	;; If a prefix argument has been given, delete n characters.
 	(current-prefix-arg (delete-char n killflag))
 	;; Otherwise, call hungry-delete-forward-impl.
-	(t (hungry-delete-forward-impl))))
+	(t (hungry-delete-forward-impl)))))
 
 
 
