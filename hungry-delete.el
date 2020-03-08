@@ -109,7 +109,8 @@ KILLFLAG is set if N was explicitly specified."
   (interactive "p\nP")
   (unless (integerp n)
     (signal 'wrong-type-argument (list 'integerp n)))
-  (if rectangle-mark-mode (delete-forward-char n killflag)
+  (if (bound-and-true-p rectangle-mark-mode)
+      (delete-forward-char n killflag)
   (cond ((and
           (use-region-p)
 	      delete-active-region
@@ -147,7 +148,8 @@ arg, and KILLFLAG is set if N is explicitly specified."
   (interactive "p\nP")
   (unless (integerp n)
     (signal 'wrong-type-argument (list 'integerp n)))
-  (if rectangle-mark-mode (delete-backward-char n killflag)
+  (if (bound-and-true-p rectangle-mark-mode)
+      (delete-backward-char n killflag)
     (cond ((and
             (use-region-p)
             delete-active-region
