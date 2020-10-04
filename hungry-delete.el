@@ -45,6 +45,10 @@
 (defvar hungry-delete-mode-map (make-keymap)
   "Keymap for hungry-delete-minor-mode.")
 
+(defvar hungry-delete-join-reluctantly nil
+  "If truthy, deletion will insert a space between two words when they would have been joined
+and are seperated by more than just one space")
+
 (if (fboundp 'delete-forward-char)
     (define-key hungry-delete-mode-map [remap delete-forward-char] 'hungry-delete-forward))
 
@@ -175,27 +179,42 @@ arg, and KILLFLAG is set if N is explicitly specified."
           ;; Otherwise, call hungry-delete-backward-impl.
           (t (hungry-delete-backward-impl)))))
 
-(defun hungry-delete-impl (fn n)
+(defun hungry-delete-impl (fn n insertion-fn)
   "Implementation of hungry-delete functionality.
 FN is the function to call to go to the end of whitespace (will
 be either hungry-delete-skip-ws-forward or
 hungry-delete-skip-ws-backwards by default).  N is the number of
 characters to delete if there is no whitespace (will be either 1
-or -1 by default)."
+or -1 by default).
+
+insertion-fn is inserts before point for delete backwards and after
+point for delete-forwards"
   (let ((here (point)))
     (funcall fn)
-    (if (/= (point) here)
-        (delete-region (point) here)
-      (let ((hungry-delete-mode nil))
-        (delete-char n)))))
+    (let ((region-start (min (point) here))
+           (region-end (max (point) here)))
+       (if (/= region-start region-end)
+           (if (and hungry-delete-join-reluctantly
+                    (>= (- region-end region-start) 2)
+                    (not (= region-start (point-min)))
+                    (not (= region-end (point-max)))
+                    (not (seq-contains hungry-delete-chars-to-skip (char-before region-start)))
+                    (not (seq-contains hungry-delete-chars-to-skip (char-after region-end))))
+               (progn
+                 (delete-region region-start region-end)
+                 (funcall insertion-fn " "))
+             (delete-region region-start region-end))
+         (let ((hungry-delete-mode nil))
+           (delete-char n))))))
 
 (defun hungry-delete-forward-impl ()
   "Do the dirty work of calling hungry-delete-forward."
-  (hungry-delete-impl 'hungry-delete-skip-ws-forward 1))
+  (hungry-delete-impl 'hungry-delete-skip-ws-forward 1
+                      (lambda (x) (save-excursion (insert x)))))
 
 (defun hungry-delete-backward-impl ()
   "Do the dirty work of calling hungry-delete-backward."
-  (hungry-delete-impl 'hungry-delete-skip-ws-backward -1))
+  (hungry-delete-impl 'hungry-delete-skip-ws-backward -1 #'insert))
 
 ;;;###autoload
 (define-minor-mode hungry-delete-mode
