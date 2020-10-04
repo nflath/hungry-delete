@@ -45,9 +45,10 @@
 (defvar hungry-delete-mode-map (make-keymap)
   "Keymap for hungry-delete-minor-mode.")
 
-(defvar hungry-delete-join-reluctantly nil
+(defcustom hungry-delete-join-reluctantly nil
   "If truthy, deletion will insert a space between two words when they would have been joined
-and are seperated by more than just one space")
+and are seperated by more than just one space"
+  :type :boolean)
 
 (if (fboundp 'delete-forward-char)
     (define-key hungry-delete-mode-map [remap delete-forward-char] 'hungry-delete-forward))
