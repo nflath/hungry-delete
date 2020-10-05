@@ -46,8 +46,8 @@
   "Keymap for hungry-delete-minor-mode.")
 
 (defcustom hungry-delete-join-reluctantly nil
-  "If truthy, deletion will insert a space between two words when they would have been joined
-and are seperated by more than just one space"
+  "If truthy, the hungry deletion functions will leave words seperated by a single space if they
+would have been joined, unless the words were separated by just one space to begin with"
   :type :boolean)
 
 (if (fboundp 'delete-forward-char)

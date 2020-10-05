@@ -24,3 +24,37 @@ To use this mode, just put the following in your init.el:
 (require 'hungry-delete)
 (global-hungry-delete-mode)
 ```
+### hungry-ish deletion ###
+
+Some users mght find hungry-delete's default behavior too aggressive, since it
+will often merge the words before and after the deletion point. This behavior
+can be changed by setting the `hungry-delete-join-reluctantly` flag to true.
+This will cause the hungry deletion functions to leave words seperated by a
+single space if they would have been joined, unless the words were separated by
+just one space to begin with
+
+As an example, suppose you're in the following state.
+
+```elisp
+;; State A
+foo        bar
+           ^
+```
+
+Pressing backspace with `hungry-delete-join-reluctantly` as `nil` (the default)
+will land you here
+
+```elisp
+;; State B
+foobar
+   ^
+```
+
+Whereas if `hungry-delete-join-reluctantly`is enabled, you'll end up here
+
+```elisp
+;; State C
+foo bar
+    ^
+```
+whereupon you can press backspace again to get to state B
