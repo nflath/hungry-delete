@@ -192,21 +192,24 @@ insertion-fn is inserts before point for delete backwards and after
 point for delete-forwards"
   (let ((here (point)))
     (funcall fn)
-    (let ((region-start (min (point) here))
-           (region-end (max (point) here)))
-       (if (/= region-start region-end)
-           (if (and hungry-delete-join-reluctantly
-                    (>= (- region-end region-start) 2)
-                    (not (= region-start (point-min)))
-                    (not (= region-end (point-max)))
-                    (not (seq-contains hungry-delete-chars-to-skip (char-before region-start)))
-                    (not (seq-contains hungry-delete-chars-to-skip (char-after region-end))))
-               (progn
-                 (delete-region region-start region-end)
-                 (funcall insertion-fn " "))
-             (delete-region region-start region-end))
-         (let ((hungry-delete-mode nil))
-           (delete-char n))))))
+    (let* ((region-start (min (point) here))
+           (region-end (max (point) here))
+           (region-size (- region-end region-start)))
+      (if (/= region-start region-end)
+          (if (and hungry-delete-join-reluctantly
+                   (or (>= region-size 2)
+                       (and (= region-size 1)
+                            (not (seq-contains " " (char-before region-end)))))
+                   (not (= region-start (point-min)))
+                   (not (= region-end (point-max)))
+                   (not (seq-contains hungry-delete-chars-to-skip (char-before region-start)))
+                   (not (seq-contains hungry-delete-chars-to-skip (char-after region-end))))
+              (progn
+                (delete-region region-start region-end)
+                (funcall insertion-fn " "))
+            (delete-region region-start region-end))
+        (let ((hungry-delete-mode nil))
+          (delete-char n))))))
 
 (defun hungry-delete-forward-impl ()
   "Do the dirty work of calling hungry-delete-forward."
