@@ -45,11 +45,6 @@
 (defvar hungry-delete-mode-map (make-keymap)
   "Keymap for hungry-delete-minor-mode.")
 
-(defcustom hungry-delete-join-reluctantly nil
-  "If truthy, the hungry deletion functions will leave words seperated by a single space if they
-would have been joined, unless the words were separated by just one space to begin with"
-  :type :boolean)
-
 (if (fboundp 'delete-forward-char)
     (define-key hungry-delete-mode-map [remap delete-forward-char] 'hungry-delete-forward))
 
@@ -61,11 +56,24 @@ would have been joined, unless the words were separated by just one space to beg
 (define-key hungry-delete-mode-map [remap c-electric-backspace] 'hungry-delete-backward)
 (define-key hungry-delete-mode-map [remap c-electric-delete-forward] 'hungry-delete-forward)
 
-(defvar hungry-delete-chars-to-skip " \t\n\r\f\v"
-  "String of characters to skip.")
+(defcustom hungry-delete-join-reluctantly nil
+  "If truthy, the hungry deletion functions will leave words
+seperated by a single space if they would have been joined,
+unless the words were separated by just one space to begin with"
+  :type 'boolean
+  :group 'hungry-delete)
 
-(defvar hungry-delete-except-modes '(help-mode minibuffer-inactive-mode calc-mode)
-  "List of modes hungry-delete will not be turned on in.")
+(defcustom hungry-delete-chars-to-skip " \t\n\r\f\v"
+  "String of characters to skip. Note that whitespace characters
+are not escaped and may look as if it is empty on the customize
+screen"
+  :type 'string
+  :group 'hungry-delete)
+
+(defcustom hungry-delete-except-modes '(help-mode minibuffer-inactive-mode calc-mode)
+  "List of modes hungry-delete will not be turned on in."
+  :type '(repeat (symbol :tag "Major mode exception"))
+  :group 'hungry-delete)
 
 (defun hungry-delete-skip-ws-forward ()
   "Skip over any whitespace following point.
@@ -237,7 +245,8 @@ executed."
     (hungry-delete-mode t)))
 
 ;;;###autoload
-(define-globalized-minor-mode global-hungry-delete-mode hungry-delete-mode turn-on-hungry-delete-mode)
+(define-globalized-minor-mode global-hungry-delete-mode hungry-delete-mode turn-on-hungry-delete-mode
+  :group 'hungry-delete)
 
 (provide 'hungry-delete)
 ;;; hungry-delete.el ends here
